@@ -1,0 +1,39 @@
+CREATE TABLE public.users (
+    user_id SERIAL PRIMARY KEY,
+    fio VARCHAR(255) NOT NULL,
+    weight NUMERIC(5,2) NOT NULL,
+    height NUMERIC(5,2) NOT NULL,
+    goal VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE public.exercise_group (
+    group_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    norm_calories INT NOT NULL,
+    load_type VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE public.record (
+    record_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    group_id INT NOT NULL,
+    calories INT NOT NULL,
+    record_date DATE NOT NULL,
+    CONSTRAINT fk_record_user FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_record_group FOREIGN KEY (group_id) REFERENCES public.exercise_group(group_id) ON DELETE CASCADE
+);
+
+INSERT INTO public.users (fio, weight, height, goal) VALUES
+('Иванов Иван Иванович', 75.5, 180.0, 'Похудеть'),
+('Петрова Анна Сергеевна', 65.0, 170.0, 'Набор мышечной массы'),
+('Сидоров Алексей Владимирович', 90.0, 185.0, 'Поддержание формы');
+
+INSERT INTO public.exercise_group (name, norm_calories, load_type) VALUES
+('Кардио', 350, 'Аэробная'),
+('Силовые', 250, 'Анаэробная'),
+('Растяжка', 120, 'Статическая');
+
+INSERT INTO public.record (user_id, group_id, calories, record_date) VALUES
+(1, 1, 320, '2024-02-08'),
+(2, 2, 280, '2024-02-09'),
+(3, 3, 100, '2024-02-10');
